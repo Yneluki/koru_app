@@ -1,0 +1,42 @@
+name: koru
+description: Koru application
+publish_to: 'none' 
+version: 1.2.0+1
+environment:
+  sdk: '>=2.18.4 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  http: ^0.13.5
+  dartz: ^0.10.1
+  flutter_riverpod: ^2.1.1
+  intl: ^0.18.0
+  flutter_slidable: ^2.0.0
+  freezed_annotation: ^2.2.0
+  json_annotation: ^4.7.0
+  uuid: ^3.0.7
+  flutter_secure_storage: ^7.0.1
+  flutter_colorpicker: ^1.0.3
+  pushy_flutter: ^2.0.11
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.11.0
+  freezed: ^2.3.2
+  build_runner:
+  json_serializable: ^6.5.4
+  
+flutter_icons:
+  image_path: koru.png
+  android: true
+  ios: true
+
+flutter:
+  uses-material-design: true
+  assets:
+    - 'koru.png'
+

@@ -1,0 +1,56 @@
+stages:
+  - test
+  - build
+
+test:
+  stage: test
+  image: cirrusci/flutter:stable
+  tags:
+    - docker
+  script:
+    - flutter test
+
+build_prod:
+  stage: build
+  image: cirrusci/flutter:stable
+  tags:
+    - docker
+  rules:
+    - if: $CI_COMMIT_BRANCH != "main"
+      when: never
+    - when: always
+  before_script:
+    - echo $ANDROID_KEY_STORE | base64 -d > keystore.jks
+    - echo storePassword=$ANDROID_KEY_STORE_PASSWORD > android/key.properties
+    - echo keyPassword=$ANDROID_KEY_PASSWORD >> android/key.properties
+    - echo keyAlias=$ANDROID_KEY_ALIAS >> android/key.properties
+    - echo storeFile=$PWD/keystore.jks >> android/key.properties
+  script:
+    - flutter build apk --split-per-abi --release --dart-define=KORU_BASE_URL=$BACKEND_PROD_URL
+  after_script:
+    - rm -f android/key.properties
+    - rm -f keystore.jks
+  artifacts:
+    paths:
+      - build/app/outputs/apk/release/*.apk
+
+
+build_dev:
+  stage: build
+  image: cirrusci/flutter:stable
+  tags:
+    - docker
+  before_script:
+    - echo $ANDROID_KEY_STORE | base64 -d > keystore.jks
+    - echo storePassword=$ANDROID_KEY_STORE_PASSWORD > android/key.properties
+    - echo keyPassword=$ANDROID_KEY_PASSWORD >> android/key.properties
+    - echo keyAlias=$ANDROID_KEY_ALIAS >> android/key.properties
+    - echo storeFile=$PWD/keystore.jks >> android/key.properties
+  script:
+    - flutter build apk --split-per-abi --release --dart-define=KORU_BASE_URL=$BACKEND_DEV_URL
+  after_script:
+    - rm -f android/key.properties
+    - rm -f keystore.jks
+  artifacts:
+    paths:
+      - build/app/outputs/apk/release/*.apk
